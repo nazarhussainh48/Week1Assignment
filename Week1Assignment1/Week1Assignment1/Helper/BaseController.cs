@@ -28,7 +28,6 @@ namespace Week1Assignment1.Helper
         /// <returns>success Ok message</returns>
         protected OkObjectResult Ok(string message)
         {
-            
             return base.Ok(new ServiceResponseModel()
             {
                 Status = ServiceResponseModel.Eresponse.Success,
@@ -44,13 +43,11 @@ namespace Week1Assignment1.Helper
         /// <returns>success ok message</returns>
         protected OkObjectResult Ok(object value, string message)
         {
-            
             return base.Ok(new ServiceResponseModel() 
             {
                 Status= ServiceResponseModel.Eresponse.Success,
                 Message= message,
                 Data = value
-            
             });
         }
 
@@ -81,6 +78,7 @@ namespace Week1Assignment1.Helper
                 Message= message
             });
         }
+        
         /// <summary>
         /// badrequest for object&string
         /// </summary>
@@ -96,6 +94,5 @@ namespace Week1Assignment1.Helper
                 Data= value
             });
         }
-
     }
 }

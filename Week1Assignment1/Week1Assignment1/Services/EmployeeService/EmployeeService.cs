@@ -6,24 +6,38 @@ namespace Week1Assignment1.Services.EmployeeService
 {
     public class EmployeeService : IEmployeeService
     {
-        private static readonly List<Employee> employees = new List<Employee>  //for the list
+        /// <summary>
+        /// List of employees
+        /// </summary>
+        private static readonly List<Employee> employees = new List<Employee>
         {
             new Employee(),
             new Employee {Id=1, Name="Malik"}
         };
 
+        /// <summary>
+        /// Automapper Injection 
+        /// </summary>
         private readonly IMapper _mapper;
-        public EmployeeService(IMapper mapper) //Imapper is the interface of automapper
+        public EmployeeService(IMapper mapper)
         {
             _mapper = mapper;
         }
 
-        public async Task<List<GetEmployeeDto>> AddEmployee(AddEmployeeDto newEmployee)
+        /// <summary>
+        /// Add new employee
+        /// </summary>
+        /// <param name="newEmployee"></param>
+        /// <returns>List of Employees</returns>
+        public List<GetEmployeeDto> AddEmployee(GetEmployeeDto newEmployee)
         {
-            //ServiceResponse<List<GetEmployeeDto>> serviceResponse = new ServiceResponse<List<GetEmployeeDto>>();
-            // Id increment directly in Model Employee
+            var employee = _mapper.Map<Employee>(newEmployee);
 
-            Employee employee = _mapper.Map<Employee>(newEmployee);
+            if (employee == null)
+            {
+                return null;
+            }
+
             if (employees.Count == 0)
             {
                 employee.Id = 0;
@@ -34,57 +48,79 @@ namespace Week1Assignment1.Services.EmployeeService
             }
 
             employees.Add(employee);
-
-
-            //    serviceResponse.Data = (employees.Select(c => _mapper.Map<GetEmployeeDto>(c))).ToList();
             var data = _mapper.Map<List<GetEmployeeDto>>(employees.ToList());
             return data;
         }
 
-        public async Task<List<GetEmployeeDto>> DeleteEmployee(int id)
+        /// <summary>
+        /// Delete Employee by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<GetEmployeeDto> DeleteEmployee(int id)
         {
-            //ServiceResponse<List<GetEmployeeDto>> serviceResponse = new ServiceResponse<List<GetEmployeeDto>>();
 
-            Employee employee = employees.FirstOrDefault(c => c.Id == id);
+            var employee = employees.FirstOrDefault(c => c.Id == id);
+
             if (employee == null)
             {
                 return null;
             }
+
             employees.Remove(employee);
             var data = employees.Select(c => _mapper.Map<GetEmployeeDto>(c)).ToList();
             return data;
         }
 
-        public async Task<List<GetEmployeeDto>> GetAllEmployees()
+        /// <summary>
+        /// Get all employees
+        /// </summary>
+        /// <returns></returns>
+        public List<GetEmployeeDto> GetAllEmployees()
         {
-            //ServiceResponse<List<GetEmployeeDto>> serviceResponse = new ServiceResponse<List<GetEmployeeDto>>();
             var data = _mapper.Map<List<GetEmployeeDto>>(employees.ToList());
             return data;
         }
 
-        public async Task<GetEmployeeDto> GetEmployeeById(int id)
+        /// <summary>
+        /// Get Employee by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public GetEmployeeDto GetEmployeeById(int id)
         {
-            //ServiceResponse<GetEmployeeDto> serviceResponse = new ServiceResponse<GetEmployeeDto>();
+            var employee = employees.FirstOrDefault(c => c.Id == id);
+
+            if (employee == null)
+            {
+                return null;
+            }
 
             var data = _mapper.Map<GetEmployeeDto>(employees.First(c => c.Id == id));
             return data;
         }
 
-        public async Task<GetEmployeeDto> UpdateEmployee(UpdateEmployeeDto updatedEmployee)
+        /// <summary>
+        /// update employee
+        /// </summary>
+        /// <param name="updatedEmployee"></param>
+        /// <returns></returns>
+        public GetEmployeeDto UpdateEmployee(GetEmployeeDto updatedEmployee)
         {
-            //ServiceResponse<GetEmployeeDto> serviceResponse = new ServiceResponse<GetEmployeeDto>();
+            var employee = employees.FirstOrDefault(c => c.Id == updatedEmployee.Id);
 
-            Employee employee = employees.FirstOrDefault(c => c.Id == updatedEmployee.Id);
             if (employee == null)
             {
                 return null;
             }
+
             employee.Name = updatedEmployee.Name;
             employee.EmployeeDept = updatedEmployee.EmployeeDept;
             employee.Salary = updatedEmployee.Salary;
             employee.Age = updatedEmployee.Age;
             var data = _mapper.Map<GetEmployeeDto>(employee);
             return data;
+
         }
     }
 }

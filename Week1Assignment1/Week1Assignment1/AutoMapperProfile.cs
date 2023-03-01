@@ -9,7 +9,7 @@ namespace Week1Assignment1
         public AutoMapperProfile() 
         {
             CreateMap<Employee, GetEmployeeDto>();
-            CreateMap<AddEmployeeDto, Employee>();
+            CreateMap<GetEmployeeDto, Employee>();
         }
     }
 }

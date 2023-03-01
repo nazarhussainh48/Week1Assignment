@@ -8,70 +8,137 @@ namespace Week1Assignment1.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class EmployeeController : BaseController //(The ControllerBase class implements the IController interface and provides the implementation for several methods and properties)
-    {
 
+    public class EmployeeController : BaseController
+    {
+        /// <summary>
+        /// The Employee Controller
+        /// </summary>
         private readonly IEmployeeService _employeeService;
 
-        public EmployeeController(IEmployeeService employeeService) // here we inject our new service into the controller by constructor
+        /// <summary>
+        /// injecting employee service into the EmployeeController by constructor
+        /// </summary>
+        /// <param name="employeeService"></param>
+        public EmployeeController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
         }
 
-        //Controller Methods are going here
-        // to get all the routes
+        /// <summary>
+        /// to get all employees
+        /// </summary>
+        /// <returns>IActionResult</returns>
         [HttpGet("GetAll")]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            var result = await _employeeService.GetAllEmployees();
-            return Ok(result, "All Employees are"); //get all employee is the service that is injected into this controller by Employee service interface
-        }
-
-
-        // Get Signle Employee
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingle(int id)
-        {
-            var result = await _employeeService.GetEmployeeById(id);
-            return Ok(result, "Success");
-        }
-
-        // Add Employee
-        [HttpPost]
-        public async Task<IActionResult> AddEmployee(AddEmployeeDto newEmployee)
-        {
-            var result = await _employeeService.AddEmployee(newEmployee);
-            return Ok(result,"Emplyee Added Successfully");
-        }
-
-        // Update Employee
-        [HttpPut]
-        public async Task<IActionResult> UpdateEmployee(UpdateEmployeeDto updatedEmployee)
-        {
-            var result = await _employeeService.UpdateEmployee(updatedEmployee);
-            if (result == null)
+            try
             {
-                return BadRequest("User not found");
-
+                var result = _employeeService.GetAllEmployees();
+                return Ok(result, MsgKeys.RetrieveEmployee);
             }
-            return Ok(result,"Updated Successfully");
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get Signle Employee by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>IActionResult</returns>
+        [HttpGet("{id}")]
+        public IActionResult GetSingle(int id)
+        {
+            try
+            {
+                var result = _employeeService.GetEmployeeById(id);
+
+                if (result == null)
+                    return BadRequest(MsgKeys.InvalidUser);
+
+                return Ok(result, MsgKeys.Success);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Add Employee
+        /// </summary>
+        /// <param name="newEmployee"></param>
+        /// <returns>IActionResult</returns>
+        [HttpPost]
+        public IActionResult AddEmployee(GetEmployeeDto newEmployee)
+        {
+            try
+            {
+
+                if (newEmployee.Name =="")
+                {
+                    return BadRequest("Please Enter the Name");
+                }
+                else if (newEmployee.EmployeeDept == "")
+                {
+                    return BadRequest("Please enter the Department");
+                }
+
+                var result =  _employeeService.AddEmployee(newEmployee);
+                return Ok(result, MsgKeys.AddEmployee);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Update Employee
+        /// </summary>
+        /// <param name="updatedEmployee"></param>
+        /// <returns>IActionResult</returns>
+        [HttpPut]
+        public IActionResult UpdateEmployee(GetEmployeeDto updatedEmployee)
+        {
+            try
+            {
+                var result = _employeeService.UpdateEmployee(updatedEmployee);
+
+                if (result == null)
+                    return BadRequest(MsgKeys.InvalidUser);
+
+                return Ok(result, MsgKeys.UpdateMsg);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
         /// Delete employee by id
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>An i action result</returns>
+        /// <returns>IActionResult</returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var result = await _employeeService.DeleteEmployee(id);
-            if (result==null)
+            try
             {
-                return BadRequest("User not found");
-                
+                var result = _employeeService.DeleteEmployee(id);
+
+                if (result == null)
+                    return BadRequest(MsgKeys.InvalidUser);
+
+                return Ok(result, MsgKeys.Success);
             }
-            return Ok(result, "Data after deleting");
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

@@ -5,19 +5,38 @@ namespace Week1Assignment1.Services.EmployeeService
 {
     public interface IEmployeeService
     {
-        //For Getting List of all employees
-        Task<List<GetEmployeeDto>> GetAllEmployees();
+        /// <summary>
+        /// For Getting List of all employees
+        /// </summary>
+        /// <returns></returns>
+        List<GetEmployeeDto> GetAllEmployees();
 
-        //For Getting the list of single employee by id
-        Task<GetEmployeeDto> GetEmployeeById(int id);
+        /// <summary>
+        /// For Getting the list of single employee by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        GetEmployeeDto GetEmployeeById(int id);
 
-        //For adding employee
-        Task<List<GetEmployeeDto>> AddEmployee(AddEmployeeDto newEmployee);
-        
-        //For Updating Employee
-        Task<GetEmployeeDto> UpdateEmployee(UpdateEmployeeDto updatedEmployee);
+        /// <summary>
+        /// For adding employee
+        /// </summary>
+        /// <param name="newEmployee"></param>
+        /// <returns></returns>
+        List<GetEmployeeDto> AddEmployee(GetEmployeeDto newEmployee);
 
-        //For Deleting Employee
-        Task<List<GetEmployeeDto>> DeleteEmployee(int id); 
+        /// <summary>
+        /// For Updating Employee
+        /// </summary>
+        /// <param name="updatedEmployee"></param>
+        /// <returns></returns>
+        GetEmployeeDto UpdateEmployee(GetEmployeeDto updatedEmployee);
+
+        /// <summary>
+        /// For Deleting Employee
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        List<GetEmployeeDto> DeleteEmployee(int id);
     }
 }
