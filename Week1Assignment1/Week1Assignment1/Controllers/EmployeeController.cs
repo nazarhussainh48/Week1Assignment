@@ -76,17 +76,10 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-                if (newEmployee.Name =="")
-                {
-                    return BadRequest("Please Enter the Name");
-                }
-                else if (newEmployee.EmployeeDept == "")
-                {
-                    return BadRequest("Please enter the Department");
-                }
-
-                var result =  _employeeService.AddEmployee(newEmployee);
+                var result = _employeeService.AddEmployee(newEmployee);
                 return Ok(result, MsgKeys.AddEmployee);
             }
             catch (Exception e)
