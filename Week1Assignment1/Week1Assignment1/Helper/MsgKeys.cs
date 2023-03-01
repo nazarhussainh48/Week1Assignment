@@ -2,7 +2,7 @@
 {
     public class MsgKeys
     {
-        public static string UpdateMsg => "Updated Successfully";
+        public static string UpdateMsg => "Updated Employee Successfully";
         public static string InvalidUser => "Invalid User";
         public static string AddEmployee => "Employee Added Successfully";
         public static string Success => "Success";
