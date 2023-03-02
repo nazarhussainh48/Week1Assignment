@@ -13,12 +13,16 @@ namespace Week1Assignment1.DTO.Employee
 
         [StringLength(60, MinimumLength = 3)]
         [Required]
-        public string Name { get; set; } 
-        public string EmployeeDept { get; set; } 
+        public string Name { get; set; }
+        [Required]
+        public string EmployeeDept { get; set; }
+        [Required]
         public int Salary { get; set; }
 
         [Range(18, 130)]
-        public int Age { get; set; } 
+        [Required]
+        public int Age { get; set; }
+        [Required]
         public EmpEnum Class { get; set; } = EmpEnum.Nazar;
     }
 }

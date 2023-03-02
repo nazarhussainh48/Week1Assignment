@@ -9,34 +9,34 @@ namespace Week1Assignment1.Services.EmployeeService
         /// For Getting List of all employees
         /// </summary>
         /// <returns></returns>
-        List<GetEmployeeDto> GetAllEmployees();
+        Task<List<GetEmployeeDto>> GetAllEmployees();
 
         /// <summary>
         /// For Getting the list of single employee by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        GetEmployeeDto GetEmployeeById(int id);
+        Task<GetEmployeeDto> GetEmployeeById(int id);
 
         /// <summary>
         /// For adding employee
         /// </summary>
         /// <param name="newEmployee"></param>
         /// <returns></returns>
-        List<GetEmployeeDto> AddEmployee(GetEmployeeDto newEmployee);
+        Task<List<GetEmployeeDto>> AddEmployee(GetEmployeeDto newEmployee);
 
         /// <summary>
         /// For Updating Employee
         /// </summary>
         /// <param name="updatedEmployee"></param>
         /// <returns></returns>
-        GetEmployeeDto UpdateEmployee(GetEmployeeDto updatedEmployee);
+        Task<GetEmployeeDto> UpdateEmployee(GetEmployeeDto updatedEmployee);
 
         /// <summary>
         /// For Deleting Employee
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        List<GetEmployeeDto> DeleteEmployee(int id);
+        Task<List<GetEmployeeDto>> DeleteEmployee(int id);
     }
 }

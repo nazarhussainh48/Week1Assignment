@@ -30,11 +30,11 @@ namespace Week1Assignment1.Controllers
         /// </summary>
         /// <returns>IActionResult</returns>
         [HttpGet("GetAll")]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                var result = _employeeService.GetAllEmployees();
+                var result = await _employeeService.GetAllEmployees();
                 return Ok(result, MsgKeys.RetrieveEmployee);
             }
             catch (Exception e)
@@ -49,11 +49,11 @@ namespace Week1Assignment1.Controllers
         /// <param name="id"></param>
         /// <returns>IActionResult</returns>
         [HttpGet("{id}")]
-        public IActionResult GetSingle(int id)
+        public async Task<IActionResult> GetSingle(int id)
         {
             try
             {
-                var result = _employeeService.GetEmployeeById(id);
+                var result =await _employeeService.GetEmployeeById(id);
 
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);
@@ -72,14 +72,14 @@ namespace Week1Assignment1.Controllers
         /// <param name="newEmployee"></param>
         /// <returns>IActionResult</returns>
         [HttpPost]
-        public IActionResult AddEmployee(GetEmployeeDto newEmployee)
+        public async Task<IActionResult> AddEmployee(GetEmployeeDto newEmployee)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = _employeeService.AddEmployee(newEmployee);
+                var result =await _employeeService.AddEmployee(newEmployee);
                 return Ok(result, MsgKeys.AddEmployee);
             }
             catch (Exception e)
@@ -94,11 +94,11 @@ namespace Week1Assignment1.Controllers
         /// <param name="updatedEmployee"></param>
         /// <returns>IActionResult</returns>
         [HttpPut]
-        public IActionResult UpdateEmployee(GetEmployeeDto updatedEmployee)
+        public async Task<IActionResult> UpdateEmployee(GetEmployeeDto updatedEmployee)
         {
             try
             {
-                var result = _employeeService.UpdateEmployee(updatedEmployee);
+                var result =await _employeeService.UpdateEmployee(updatedEmployee);
 
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);
@@ -117,11 +117,11 @@ namespace Week1Assignment1.Controllers
         /// <param name="id"></param>
         /// <returns>IActionResult</returns>
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var result = _employeeService.DeleteEmployee(id);
+                var result =await _employeeService.DeleteEmployee(id);
 
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);
