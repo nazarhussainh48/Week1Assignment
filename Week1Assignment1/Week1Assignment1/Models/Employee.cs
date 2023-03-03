@@ -8,5 +8,9 @@
         public int Salary { get; set; } = 30000;
         public int Age { get; set; } = 25;
         public EmpEnum Class { get; set; } = EmpEnum.Nazar;
+        /// <summary>
+        /// here making relation with model Employee
+        /// </summary>
+        public MyUser User { get; set; }
     }
 }

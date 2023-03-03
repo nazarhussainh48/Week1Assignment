@@ -76,7 +76,7 @@ namespace Week1Assignment1.Services.EmployeeService
 
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
-            var data = employees.Select(c => _mapper.Map<GetEmployeeDto>(c)).ToList();
+            var data = _context.Employees.Select(c => _mapper.Map<GetEmployeeDto>(c)).ToList();
             return data;
         }
 

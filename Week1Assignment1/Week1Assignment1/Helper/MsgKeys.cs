@@ -7,5 +7,8 @@
         public static string AddEmployee => "Employee Added Successfully";
         public static string Success => "Success";
         public static string RetrieveEmployee => "Employees Retrieved Successfully";
+        public static string UserExist => "User Already Exist";
+        public static string WrongPassword => "Wrong Password";
+        
     }
 }
