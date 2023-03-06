@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Week1Assignment1.DTO.Employee;
 using Week1Assignment1.Helper;
 using Week1Assignment1.Models;
@@ -6,6 +8,7 @@ using Week1Assignment1.Services.EmployeeService;
 
 namespace Week1Assignment1.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
 
@@ -29,11 +32,13 @@ namespace Week1Assignment1.Controllers
         /// to get all employees
         /// </summary>
         /// <returns>IActionResult</returns>
+        //[AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<IActionResult> Get()
         {
             try
             {
+                //int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
                 var result = await _employeeService.GetAllEmployees();
                 return Ok(result, MsgKeys.RetrieveEmployee);
             }

@@ -1,4 +1,6 @@
-﻿namespace Week1Assignment1.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Week1Assignment1.Models
 {
     public class Employee
     {
@@ -11,6 +13,9 @@
         /// <summary>
         /// here making relation with model Employee
         /// </summary>
+        //[ForeignKey("UserId")]
         public MyUser User { get; set; }
+        public Weapon Weapon { get; set; }
+        public List<EmployeeSkill> EmployeeSkills { get; set; }
     }
 }

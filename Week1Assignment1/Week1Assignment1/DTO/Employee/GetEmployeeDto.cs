@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Week1Assignment1.DTO.Weapon;
 using Week1Assignment1.Models;
 
 namespace Week1Assignment1.DTO.Employee
@@ -24,5 +25,7 @@ namespace Week1Assignment1.DTO.Employee
         public int Age { get; set; }
         [Required]
         public EmpEnum Class { get; set; } = EmpEnum.Nazar;
+
+        public GetWeaponDto Weapon { get; set; }
     }
 }

@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Reflection;
 using Week1Assignment1.Models;
 
-namespace Week1Assignment1.Helper
+namespace Week1Assignment1.Controllers
 {
-    public class BaseController: ControllerBase
+    public class BaseController : ControllerBase
     {
         /// <summary>
         ///  Ok Response for object
@@ -18,7 +18,7 @@ namespace Week1Assignment1.Helper
             {
                 Status = ServiceResponseModel.Eresponse.Success,
                 Data = value
-            }); 
+            });
         }
 
         /// <summary>
@@ -43,10 +43,10 @@ namespace Week1Assignment1.Helper
         /// <returns>success ok message</returns>
         protected OkObjectResult Ok(object value, string message)
         {
-            return base.Ok(new ServiceResponseModel() 
+            return base.Ok(new ServiceResponseModel()
             {
-                Status= ServiceResponseModel.Eresponse.Success,
-                Message= message,
+                Status = ServiceResponseModel.Eresponse.Success,
+                Message = message,
                 Data = value
             });
         }
@@ -75,10 +75,10 @@ namespace Week1Assignment1.Helper
             return base.BadRequest(new ServiceResponseModel()
             {
                 Status = ServiceResponseModel.Eresponse.Error,
-                Message= message
+                Message = message
             });
         }
-        
+
         /// <summary>
         /// badrequest for object&string
         /// </summary>
@@ -91,7 +91,7 @@ namespace Week1Assignment1.Helper
             {
                 Status = ServiceResponseModel.Eresponse.Error,
                 Message = message,
-                Data= value
+                Data = value
             });
         }
     }

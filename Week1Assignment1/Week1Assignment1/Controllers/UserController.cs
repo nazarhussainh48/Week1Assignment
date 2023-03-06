@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Week1Assignment1.Data;
 using Week1Assignment1.DTO.User;
-using Week1Assignment1.Helper;
 using Week1Assignment1.Models;
 
 namespace Week1Assignment1.Controllers
