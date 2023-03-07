@@ -1,0 +1,76 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Week1Assignment1.Data;
+using Week1Assignment1.DTO.User;
+using Week1Assignment1.Helper;
+using Week1Assignment1.Models;
+using Week1Assignment1.Services.AuthService;
+
+namespace Week1Assignment1.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class UserController : BaseController
+    {
+
+        private readonly IAuthService _authUser;
+
+        /// <summary>
+        /// Inject AuthService
+        /// </summary>
+        /// <param name="authUser"></param>
+        public UserController(IAuthService authUser)
+        {
+            _authUser = authUser;
+        }
+
+        /// <summary>
+        /// Register User
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>IActionResult</returns>
+        [HttpPost("RegUser")]
+        public async Task<IActionResult> RegUser(UserRegDto request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var result = await _authUser.RegisterUser(
+                    new MyUser { Username = request.Username }, request.Password
+                    );
+
+                return Ok(new {result}, MsgKeys.RegisterSuccess);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Login User
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>IActionResult</returns>
+        [HttpPost("LoginUser")]
+        public async Task<IActionResult> LoginUser(UserLoginDto request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var result = await _authUser.Login(
+                    request.Username, request.Password
+                    );
+
+                return Ok(new {result}, MsgKeys.LoginSuccess);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    }
+}
