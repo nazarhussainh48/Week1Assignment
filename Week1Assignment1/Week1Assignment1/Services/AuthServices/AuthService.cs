@@ -5,27 +5,40 @@ using System.Security.Claims;
 using System.Text;
 using Week1Assignment1.Helper;
 using Week1Assignment1.Models;
+using Week1Assignment1.Services.AuthServices;
 
 namespace Week1Assignment1.Data
 {
-    public class AuthRepository : IAuthRepository
+    public class AuthService : IAuthService
     {
 
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
 
-        public AuthRepository(DataContext context, IConfiguration configuration)
+        /// <summary>
+        /// Injecting DbContext and Configuration Services
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="configuration"></param>
+        public AuthService(DataContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Login User
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns>data</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<string> Login(string username, string password)
         {
-            MyUser user = await _context.Users.FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToLower()));
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToLower()));
             if (user == null)
             {
-                throw new Exception(MsgKeys.InvalidUser);
+                throw new Exception(MsgKeys.UserNotFound);
             }
             else if (!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
             {
@@ -38,7 +51,13 @@ namespace Week1Assignment1.Data
             }
         }
 
-
+        /// <summary>
+        /// Register User
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns>data</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<int> RegisterUser(MyUser user, string password)
         {
             if (await UserExists(user.Username))
@@ -54,6 +73,11 @@ namespace Week1Assignment1.Data
             return data;
         }
 
+        /// <summary>
+        /// Verify if user exists
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public async Task<bool> UserExists(string username)
         {
             if (await _context.Users.AnyAsync(x => x.Username.ToLower() == username.ToLower()))
@@ -72,6 +96,13 @@ namespace Week1Assignment1.Data
             }
         }
 
+        /// <summary>
+        /// verify password
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="passwordHash"></param>
+        /// <param name="passwordSalt"></param>
+        /// <returns></returns>
         private bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))

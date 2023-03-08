@@ -42,6 +42,7 @@ namespace Week1Assignment1.Services.EmployeeService
         private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         public async Task<List<GetEmployeeDto>> AddEmployee(GetEmployeeDto newEmployee)
         {
+            
             Employee employee = _mapper.Map<Employee>(newEmployee);
             employee.User = _context.Users.FirstOrDefault(u => u.Id == GetUserId());
 

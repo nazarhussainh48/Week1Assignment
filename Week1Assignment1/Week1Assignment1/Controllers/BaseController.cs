@@ -17,7 +17,8 @@ namespace Week1Assignment1.Controllers
             return base.Ok(new ServiceResponseModel()
             {
                 Status = ServiceResponseModel.Eresponse.Success,
-                Data = value
+                Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(value, null))
             });
         }
 
@@ -47,7 +48,8 @@ namespace Week1Assignment1.Controllers
             {
                 Status = ServiceResponseModel.Eresponse.Success,
                 Message = message,
-                Data = value
+                Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(value, null))
             });
         }
 
@@ -91,7 +93,8 @@ namespace Week1Assignment1.Controllers
             {
                 Status = ServiceResponseModel.Eresponse.Error,
                 Message = message,
-                Data = value
+                Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(value, null))
             });
         }
     }

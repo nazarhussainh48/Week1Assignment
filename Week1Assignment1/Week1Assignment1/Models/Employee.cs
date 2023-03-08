@@ -15,7 +15,5 @@ namespace Week1Assignment1.Models
         /// </summary>
         //[ForeignKey("UserId")]
         public MyUser User { get; set; }
-        public Weapon Weapon { get; set; }
-        public List<EmployeeSkill> EmployeeSkills { get; set; }
     }
 }

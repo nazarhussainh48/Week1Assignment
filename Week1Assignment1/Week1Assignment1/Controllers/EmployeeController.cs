@@ -40,7 +40,7 @@ namespace Week1Assignment1.Controllers
             {
                 //int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
                 var result = await _employeeService.GetAllEmployees();
-                return Ok(result, MsgKeys.RetrieveEmployee);
+                return Ok(new { result }, MsgKeys.RetrieveEmployee);
             }
             catch (Exception e)
             {
@@ -63,7 +63,7 @@ namespace Week1Assignment1.Controllers
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);
 
-                return Ok(result, MsgKeys.Success);
+                return Ok(new { result }, MsgKeys.RetrievSingle);
             }
             catch (Exception e)
             {
@@ -85,7 +85,7 @@ namespace Week1Assignment1.Controllers
                     return BadRequest(ModelState);
 
                 var result =await _employeeService.AddEmployee(newEmployee);
-                return Ok(result, MsgKeys.AddEmployee);
+                return Ok(new { result }, MsgKeys.AddEmployee);
             }
             catch (Exception e)
             {
@@ -108,7 +108,7 @@ namespace Week1Assignment1.Controllers
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);
 
-                return Ok(result, MsgKeys.UpdateMsg);
+                return Ok(new { result }, MsgKeys.UpdateMsg);
             }
             catch (Exception e)
             {
@@ -131,7 +131,7 @@ namespace Week1Assignment1.Controllers
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);
 
-                return Ok(result, MsgKeys.Success);
+                return Ok(new { result }, MsgKeys.DeleteRecord);
             }
             catch (Exception e)
             {
