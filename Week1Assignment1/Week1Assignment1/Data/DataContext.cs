@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Week1Assignment1.Models;
 
 namespace Week1Assignment1.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext
     {
         /// <summary>
         /// Data Context
