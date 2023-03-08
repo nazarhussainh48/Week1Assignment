@@ -32,7 +32,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddIdentity<IdentityUser, IdentityRole>();
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>();
 
 var app = builder.Build();
 
