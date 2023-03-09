@@ -18,7 +18,7 @@ namespace Week1Assignment1.Controllers
             {
                 Status = ServiceResponseModel.Eresponse.Success,
                 Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(value, null))
+                .ToDictionary(prop=> prop.Name, prop =>  prop.GetValue(value))
             });
         }
 
@@ -49,7 +49,7 @@ namespace Week1Assignment1.Controllers
                 Status = ServiceResponseModel.Eresponse.Success,
                 Message = message,
                 Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(value, null))
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(value))
             });
         }
 

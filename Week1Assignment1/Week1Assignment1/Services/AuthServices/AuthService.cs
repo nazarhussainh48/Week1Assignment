@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Week1Assignment1.DTO.User;
 using Week1Assignment1.Helper;
 using Week1Assignment1.Models;
 using Week1Assignment1.Services.AuthServices;
@@ -14,16 +16,23 @@ namespace Week1Assignment1.Data
 
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         /// <summary>
         /// Injecting DbContext and Configuration Services
         /// </summary>
         /// <param name="context"></param>
         /// <param name="configuration"></param>
-        public AuthService(DataContext context, IConfiguration configuration)
+        public AuthService(DataContext context, IConfiguration configuration,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager
+            )
         {
             _context = context;
             _configuration = configuration;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         /// <summary>
@@ -33,22 +42,30 @@ namespace Week1Assignment1.Data
         /// <param name="password"></param>
         /// <returns>data</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<string> Login(string username, string password)
+        public async Task<string> Login(UserLoginDto userLogin)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToLower()));
-            if (user == null)
+            var result = await _signInManager.PasswordSignInAsync(userLogin.Username, userLogin.Password, false, false);
+
+            if(!result.Succeeded)
             {
-                throw new Exception(MsgKeys.UserNotFound);
+                return null;
             }
-            else if (!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+
+            var authClaim = new List<Claim>
             {
-                throw new Exception(MsgKeys.WrongPassword);
-            }
-            else
-            {
-                var data = CreateToken(user);
-                return data;
-            }
+                new Claim(ClaimTypes.Name, userLogin.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+            var authSignKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["JWT:Secret"]));
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
+                expires: DateTime.Now.AddDays(1),
+                claims: authClaim,
+                signingCredentials: new SigningCredentials(authSignKey, SecurityAlgorithms.HmacSha256Signature)
+                );
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         /// <summary>
@@ -58,19 +75,25 @@ namespace Week1Assignment1.Data
         /// <param name="password"></param>
         /// <returns>data</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<int> RegisterUser(MyUser user, string password)
+        public async Task<IdentityResult> RegisterUser(MyUser user, string password)
         {
-            if (await UserExists(user.Username))
+            var iuser = new IdentityUser()
             {
-                throw new Exception(MsgKeys.UserExist);
-            }
-            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            var data = user.Id;
-            return data;
+                UserName = user.Username
+            };
+            //if (await UserExists(user.Username))
+            //{
+            //    throw new Exception(MsgKeys.UserExist);
+            //}
+            var result = await _userManager.CreateAsync(iuser, password);
+            return result;
+            //CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+            //user.PasswordHash = passwordHash;
+            //user.PasswordSalt = passwordSalt;
+            //await _context.Users.AddAsync(user);
+            //await _context.SaveChangesAsync();
+            //var data = user.Id;
+            //return data;
         }
 
         /// <summary>
@@ -78,14 +101,14 @@ namespace Week1Assignment1.Data
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public async Task<bool> UserExists(string username)
-        {
-            if (await _context.Users.AnyAsync(x => x.Username.ToLower() == username.ToLower()))
-            {
-                return true;
-            }
-            return false;
-        }
+        //public async Task<bool> UserExists(string username)
+        //{
+        //    if (await _context.Users.AnyAsync(x => x.Username.ToLower() == username.ToLower()))
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {

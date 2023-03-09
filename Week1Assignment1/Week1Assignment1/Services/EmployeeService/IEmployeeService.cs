@@ -37,6 +37,6 @@ namespace Week1Assignment1.Services.EmployeeService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<List<GetEmployeeDto>> DeleteEmployee(int id);
+        Task<GetEmployeeDto> DeleteEmployee(int id);
     }
 }

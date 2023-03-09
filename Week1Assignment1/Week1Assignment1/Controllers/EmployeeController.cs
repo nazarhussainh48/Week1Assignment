@@ -8,9 +8,10 @@ using Week1Assignment1.Services.EmployeeService;
 
 namespace Week1Assignment1.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
+    
+    [Authorize]
 
     public class EmployeeController : BaseController
     {
@@ -33,6 +34,8 @@ namespace Week1Assignment1.Controllers
         /// </summary>
         /// <returns>IActionResult</returns>
         //[AllowAnonymous]
+
+
         [HttpGet("GetAll")]
         public async Task<IActionResult> Get()
         {
@@ -58,7 +61,7 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-                var result =await _employeeService.GetEmployeeById(id);
+                var result = await _employeeService.GetEmployeeById(id);
 
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);
@@ -84,7 +87,7 @@ namespace Week1Assignment1.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result =await _employeeService.AddEmployee(newEmployee);
+                var result = await _employeeService.AddEmployee(newEmployee);
                 return Ok(new { result }, MsgKeys.AddEmployee);
             }
             catch (Exception e)
@@ -103,7 +106,7 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-                var result =await _employeeService.UpdateEmployee(updatedEmployee);
+                var result = await _employeeService.UpdateEmployee(updatedEmployee);
 
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);
@@ -126,7 +129,7 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-                var result =await _employeeService.DeleteEmployee(id);
+                var result = await _employeeService.DeleteEmployee(id);
 
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);

@@ -1,4 +1,6 @@
-﻿using Week1Assignment1.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Week1Assignment1.DTO.User;
+using Week1Assignment1.Models;
 
 namespace Week1Assignment1.Services.AuthServices
 {
@@ -10,19 +12,19 @@ namespace Week1Assignment1.Services.AuthServices
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<int> RegisterUser(MyUser user, string password);
+        Task<IdentityResult> RegisterUser(MyUser user, string password);
         /// <summary>
         /// login user interface
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<string> Login(string username, string password);
+        Task<string> Login(UserLoginDto userLogin);
         /// <summary>
         /// user exists interface
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        Task<bool> UserExists(string username);
+        //Task<bool> UserExists(string username);
     }
 }

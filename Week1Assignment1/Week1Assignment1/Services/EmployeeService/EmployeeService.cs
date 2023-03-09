@@ -39,12 +39,12 @@ namespace Week1Assignment1.Services.EmployeeService
         /// <returns>List of Employees</returns>
         /// 
 
-        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        //private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         public async Task<List<GetEmployeeDto>> AddEmployee(GetEmployeeDto newEmployee)
         {
-            
+
             Employee employee = _mapper.Map<Employee>(newEmployee);
-            employee.User = _context.Users.FirstOrDefault(u => u.Id == GetUserId());
+            //employee.User = _context.Users.FirstOrDefault(u => u.Id == GetUserId());
 
             if (employee == null)
             {
@@ -53,7 +53,7 @@ namespace Week1Assignment1.Services.EmployeeService
 
             await _context.AddAsync(employee);
             await _context.SaveChangesAsync();
-            var data = _mapper.Map<List<GetEmployeeDto>>(_context.Employees.Where(c=>c.User.Id == GetUserId()).ToList());
+            var data = _mapper.Map<List<GetEmployeeDto>>(_context.Employees.ToList());
             return data;
         }
 
@@ -62,10 +62,10 @@ namespace Week1Assignment1.Services.EmployeeService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<List<GetEmployeeDto>> DeleteEmployee(int id)
+        public async Task<GetEmployeeDto> DeleteEmployee(int id)
         {
 
-            var employee = await _context.Employees.FirstOrDefaultAsync(c => c.Id == id && c.User.Id == GetUserId());
+            var employee = await _context.Employees.FirstOrDefaultAsync(c => c.Id == id);
 
             if (employee == null)
             {
@@ -74,7 +74,7 @@ namespace Week1Assignment1.Services.EmployeeService
 
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
-            var data = _context.Employees.Where(c=>c.User.Id == GetUserId()).Select(c => _mapper.Map<GetEmployeeDto>(c)).ToList();
+            var data = _mapper.Map<GetEmployeeDto>(employee);
             return data;
         }
 
@@ -84,7 +84,7 @@ namespace Week1Assignment1.Services.EmployeeService
         /// <returns></returns>
         public async Task<List<GetEmployeeDto>> GetAllEmployees()
         {
-            List<Employee> dbEmployee = await _context.Employees.Where(c=> c.User.Id ==GetUserId()).ToListAsync();
+            List<Employee> dbEmployee = await _context.Employees.ToListAsync();
 
             var data = _mapper.Map<List<GetEmployeeDto>>(dbEmployee.ToList());
             return data;
@@ -99,7 +99,7 @@ namespace Week1Assignment1.Services.EmployeeService
         {
 
             //var employee = employees.FirstOrDefault(c => c.Id == id);
-            Employee dbEmployee = await _context.Employees.FirstOrDefaultAsync(c => c.Id == id && c.User.Id == GetUserId());
+            Employee dbEmployee = await _context.Employees.FirstOrDefaultAsync(c => c.Id == id);
 
             if (dbEmployee == null)
             {
@@ -117,22 +117,22 @@ namespace Week1Assignment1.Services.EmployeeService
         /// <returns></returns>
         public async Task<GetEmployeeDto> UpdateEmployee(GetEmployeeDto updatedEmployee)
         {
-            var employee = await _context.Employees.FirstOrDefaultAsync(c => c.Id == updatedEmployee.Id && c.User.Id == GetUserId());
+            //var entityToUpdate = _context.Employees.FirstOrDefaultAsync(c => c.Id == updatedEmployee.Id);
+            //var employee = await _context.Employees.FirstOrDefaultAsync(c => c.Id == updatedEmployee.Id);
 
-            if (employee == null)
-            {
-                return null;
-            }
-
-            employee.Name = updatedEmployee.Name;
-            employee.EmployeeDept = updatedEmployee.EmployeeDept;
-            employee.Salary = updatedEmployee.Salary;
-            employee.Age = updatedEmployee.Age;
-
-            _context.Employees.Update(employee);
-            await _context.SaveChangesAsync();
-            var data = _mapper.Map<GetEmployeeDto>(employee);
-            return data;
+            //if (employee == null)
+            //{
+            //    return null;
+            //}
+            //employee.Name = updatedEmployee.Name;
+            //employee.EmployeeDept = updatedEmployee.EmployeeDept;
+            //employee.Salary = updatedEmployee.Salary;
+            //employee.Age = updatedEmployee.Age;
+            var data = _mapper.Map<Employee>(updatedEmployee);
+             _context.Employees.Update(data);
+             await _context.SaveChangesAsync();
+          
+            return updatedEmployee;
         }
     }
 }

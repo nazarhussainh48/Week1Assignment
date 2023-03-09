@@ -14,6 +14,6 @@ namespace Week1Assignment1.Models
         /// here making relation with model Employee
         /// </summary>
         //[ForeignKey("UserId")]
-        public MyUser User { get; set; }
+        //public MyUser User { get; set; }
     }
 }

@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Week1Assignment1.Models;
 
 namespace Week1Assignment1.Data
 {
-    public class DataContext : IdentityDbContext
+    public class DataContext : IdentityDbContext<IdentityUser>
     {
         /// <summary>
         /// Data Context
@@ -17,7 +18,7 @@ namespace Week1Assignment1.Data
 
         public DbSet<Employee> Employees { get; set; }
 
-        public DbSet<MyUser> Users { get; set; }
+        //public DbSet<MyUser> Users { get; set; }
 
         
     }

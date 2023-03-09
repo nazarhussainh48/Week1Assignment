@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Week1Assignment1.Data;
 using Week1Assignment1.DTO.User;
 using Week1Assignment1.Helper;
@@ -12,10 +13,12 @@ namespace Week1Assignment1.Controllers
     public class UserController : BaseController
     {
         private readonly IAuthService _authUser;
+        
 
         public UserController(IAuthService authUser)
         {
             _authUser = authUser;
+            
         }
 
         /// <summary>
@@ -50,18 +53,18 @@ namespace Week1Assignment1.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("LoginUser")]
-        public async Task<IActionResult> LoginUser(UserLoginDto request)
+        public async Task<IActionResult> LoginUser([FromBody] UserLoginDto request)
         {
             try
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                    var result = await _authUser.Login(request);
 
-                var result = await _authUser.Login(
-                    request.Username, request.Password
-                    );
-
-                return Ok(new { result }, MsgKeys.LoginUserSuccess);
+                    if (string.IsNullOrEmpty(result))
+                    {
+                        return Unauthorized();
+                    }
+                    return Ok(new { result }, MsgKeys.LoginUserSuccess);
+                
             }
             catch (Exception ex)
             {
