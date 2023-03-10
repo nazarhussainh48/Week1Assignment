@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Week1Assignment1.DTO.Employee;
 using Week1Assignment1.Helper;
 using Week1Assignment1.Models;
 using Week1Assignment1.Services.EmployeeService;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 
 namespace Week1Assignment1.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    
+
     [Authorize]
 
     public class EmployeeController : BaseController
@@ -37,13 +40,22 @@ namespace Week1Assignment1.Controllers
 
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> Get()
+        [HttpGet(Name = "EmployeeController"), Authorize]
+        public async Task<IActionResult> Get(int page = 1, int pageSize = 2)
         {
             try
             {
                 //int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
                 var result = await _employeeService.GetAllEmployees();
-                return Ok(new { result }, MsgKeys.RetrieveEmployee);
+                var totalRecords = result.Count();
+                var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+                var items = result
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+                return Ok(new { items }, MsgKeys.RetrieveEmployee);
             }
             catch (Exception e)
             {
