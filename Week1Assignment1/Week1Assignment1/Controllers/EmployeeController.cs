@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -145,6 +146,21 @@ namespace Week1Assignment1.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpPost("search")]
+        public async Task<IActionResult> Search(string search)
+        {
+            var results = await _employeeService.SearchPeople(search);
+
+            return Ok(new { results }, "Your Search Result!");
+        }
+
+        [HttpGet("sort")]
+        public async Task<IActionResult> Index(string sortOrder)
+        {
+            var results = await _employeeService.GetSort(sortOrder);
+            return Ok(new { results }, "Your Search Result!");
         }
     }
 }

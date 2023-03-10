@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Security.Claims;
 using Week1Assignment1.Data;
 using Week1Assignment1.DTO.Employee;
@@ -104,6 +106,29 @@ namespace Week1Assignment1.Services.EmployeeService
             _context.Employees.Update(data);
             await _context.SaveChangesAsync();
             return updatedEmployee;
+        }
+
+        public async Task<List<GetEmployeeDto>> SearchPeople(string search)
+        {
+            List<Employee> dbEmployee = await _context.Employees.ToListAsync();
+            var data = _mapper.Map<List<GetEmployeeDto>>(dbEmployee.ToList());
+            return data.Where(p => p.Name.ToLower().Contains(search.ToLower()) || p.EmployeeDept.ToLower().Contains(search.ToLower())).ToList();
+        }
+
+        public async Task<List<GetEmployeeDto>> GetSort(string sort)
+        {
+            List<Employee> dbEmployee = await _context.Employees.ToListAsync();
+            var data = _mapper.Map<List<GetEmployeeDto>>(dbEmployee.ToList());
+            switch (sort)
+            {
+                case "name_desc":
+                    data = data.OrderByDescending(c => c.Name).ToList();
+                    break;
+                default:
+                    data = data.OrderBy(p => p.Name).ToList();
+                    break;
+            }
+            return data;
         }
     }
 }
