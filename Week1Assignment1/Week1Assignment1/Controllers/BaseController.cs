@@ -16,7 +16,7 @@ namespace Week1Assignment1.Controllers
         {
             return base.Ok(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Success,
+                Status = ServiceResponseModel.Response.Success,
                 Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .ToDictionary(prop=> prop.Name, prop =>  prop.GetValue(value))
             });
@@ -31,7 +31,7 @@ namespace Week1Assignment1.Controllers
         {
             return base.Ok(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Success,
+                Status = ServiceResponseModel.Response.Success,
                 Message = message
             });
         }
@@ -46,7 +46,7 @@ namespace Week1Assignment1.Controllers
         {
             return base.Ok(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Success,
+                Status = ServiceResponseModel.Response.Success,
                 Message = message,
                 Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(value))
@@ -62,7 +62,7 @@ namespace Week1Assignment1.Controllers
         {
             return base.BadRequest(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Error,
+                Status = ServiceResponseModel.Response.Error,
                 Data = message
             });
         }
@@ -76,7 +76,7 @@ namespace Week1Assignment1.Controllers
         {
             return base.BadRequest(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Error,
+                Status = ServiceResponseModel.Response.Error,
                 Message = message
             });
         }
@@ -91,7 +91,7 @@ namespace Week1Assignment1.Controllers
         {
             return base.BadRequest(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Error,
+                Status = ServiceResponseModel.Response.Error,
                 Message = message,
                 Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(value, null))
