@@ -17,9 +17,5 @@ namespace Week1Assignment1.Data
         }
 
         public DbSet<Employee> Employees { get; set; }
-
-        //public DbSet<MyUser> Users { get; set; }
-
-        
     }
 }

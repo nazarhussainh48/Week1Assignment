@@ -24,16 +24,14 @@ namespace Week1Assignment1.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("RegUser")]
-        public async Task<IActionResult> RegUser(UserRegDto request)
+        public async Task<IActionResult> RegUser([FromBody] UserRegDto request)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = await _authUser.RegisterUser(
-                new MyUser {Username = request.Username }, request.Password
-                );
+                var result = await _authUser.RegisterUser(request);
                 return Ok(new { result }, MsgKeys.RegisterUser);
             }
             catch (Exception ex)

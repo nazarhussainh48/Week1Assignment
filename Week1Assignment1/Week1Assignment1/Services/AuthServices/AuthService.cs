@@ -71,13 +71,13 @@ namespace Week1Assignment1.Data
         /// <param name="password"></param>
         /// <returns>data</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<IdentityResult> RegisterUser(MyUser user, string password)
+        public async Task<IdentityResult> RegisterUser(UserRegDto userReg)
         {
             var iuser = new IdentityUser()
             {
-                UserName = user.Username
+                UserName = userReg.Username
             };
-            var result = await _userManager.CreateAsync(iuser, password);
+            var result = await _userManager.CreateAsync(iuser, userReg.Password);
             return result;
         }
     }

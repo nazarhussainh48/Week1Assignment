@@ -10,9 +10,7 @@ namespace Week1Assignment1.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    
     [Authorize]
-
     public class EmployeeController : BaseController
     {
         /// <summary>
@@ -33,15 +31,12 @@ namespace Week1Assignment1.Controllers
         /// to get all employees
         /// </summary>
         /// <returns>IActionResult</returns>
-        //[AllowAnonymous]
-
-
         [HttpGet("GetAll")]
+        [HttpGet(Name = "EmployeeController"), Authorize]
         public async Task<IActionResult> Get()
         {
             try
             {
-                //int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
                 var result = await _employeeService.GetAllEmployees();
                 return Ok(new { result }, MsgKeys.RetrieveEmployee);
             }
