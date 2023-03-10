@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Reflection;
 using Week1Assignment1.Models;
 
@@ -16,9 +15,9 @@ namespace Week1Assignment1.Controllers
         {
             return base.Ok(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Success,
+                Status = ServiceResponseModel.Response.Success,
                 Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .ToDictionary(prop=> prop.Name, prop =>  prop.GetValue(value))
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(value))
             });
         }
 
@@ -31,7 +30,7 @@ namespace Week1Assignment1.Controllers
         {
             return base.Ok(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Success,
+                Status = ServiceResponseModel.Response.Success,
                 Message = message
             });
         }
@@ -46,7 +45,7 @@ namespace Week1Assignment1.Controllers
         {
             return base.Ok(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Success,
+                Status = ServiceResponseModel.Response.Success,
                 Message = message,
                 Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(value))
@@ -62,7 +61,7 @@ namespace Week1Assignment1.Controllers
         {
             return base.BadRequest(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Error,
+                Status = ServiceResponseModel.Response.Error,
                 Data = message
             });
         }
@@ -76,7 +75,7 @@ namespace Week1Assignment1.Controllers
         {
             return base.BadRequest(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Error,
+                Status = ServiceResponseModel.Response.Error,
                 Message = message
             });
         }
@@ -86,12 +85,12 @@ namespace Week1Assignment1.Controllers
         /// </summary>
         /// <param name="value"></param>
         /// <param name="message"></param>
-        /// <returns>return bad respons for both object&string</returns>
+        /// <returns>return bad response for both object&string</returns>
         protected BadRequestObjectResult BadRequest(object value, string message)
         {
             return base.BadRequest(new ServiceResponseModel()
             {
-                Status = ServiceResponseModel.Eresponse.Error,
+                Status = ServiceResponseModel.Response.Error,
                 Message = message,
                 Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(value, null))

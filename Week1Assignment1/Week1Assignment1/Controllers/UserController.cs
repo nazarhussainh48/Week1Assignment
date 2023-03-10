@@ -13,12 +13,9 @@ namespace Week1Assignment1.Controllers
     public class UserController : BaseController
     {
         private readonly IAuthService _authUser;
-        
-
         public UserController(IAuthService authUser)
         {
             _authUser = authUser;
-            
         }
 
         /// <summary>
@@ -31,14 +28,12 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
                 var result = await _authUser.RegisterUser(
                 new MyUser { Username = request.Username }, request.Password
                 );
-
                 return Ok(new { result }, MsgKeys.RegisterUser);
             }
             catch (Exception ex)
@@ -57,14 +52,12 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-                    var result = await _authUser.Login(request);
+                var result = await _authUser.Login(request);
 
-                    if (string.IsNullOrEmpty(result))
-                    {
-                        return Unauthorized();
-                    }
-                    return Ok(new { result }, MsgKeys.LoginUserSuccess);
-                
+                if (string.IsNullOrEmpty(result))
+                    return Unauthorized();
+
+                return Ok(new { result }, MsgKeys.LoginUserSuccess);
             }
             catch (Exception ex)
             {

@@ -20,11 +20,5 @@ namespace Week1Assignment1.Services.AuthServices
         /// <param name="password"></param>
         /// <returns></returns>
         Task<string> Login(UserLoginDto userLogin);
-        /// <summary>
-        /// user exists interface
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        //Task<bool> UserExists(string username);
     }
 }

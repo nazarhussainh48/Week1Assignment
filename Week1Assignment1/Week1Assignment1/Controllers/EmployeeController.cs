@@ -13,7 +13,6 @@ namespace Week1Assignment1.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-
     [Authorize]
 
     public class EmployeeController : BaseController
@@ -36,25 +35,19 @@ namespace Week1Assignment1.Controllers
         /// to get all employees
         /// </summary>
         /// <returns>IActionResult</returns>
-        //[AllowAnonymous]
-
-
         [HttpGet("GetAll")]
         [HttpGet(Name = "EmployeeController"), Authorize]
         public async Task<IActionResult> Get(int page = 1, int pageSize = 2)
         {
             try
             {
-                //int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
                 var result = await _employeeService.GetAllEmployees();
                 var totalRecords = result.Count();
                 var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
-
                 var items = result
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
-
                 return Ok(new { items }, MsgKeys.RetrieveEmployee);
             }
             catch (Exception e)
