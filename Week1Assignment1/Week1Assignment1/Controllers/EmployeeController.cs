@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Xml;
 using Week1Assignment1.DTO.Employee;
 using Week1Assignment1.Helper;
 using Week1Assignment1.Models;
+using Week1Assignment1.Repository;
 using Week1Assignment1.Services.EmployeeService;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -22,14 +24,16 @@ namespace Week1Assignment1.Controllers
         /// The Employee Controller
         /// </summary>
         private readonly IEmployeeService _employeeService;
+        private readonly IGenericRepository<Employee> _genericRepository;
 
         /// <summary>
         /// injecting employee service into the EmployeeController by constructor
         /// </summary>
         /// <param name="employeeService"></param>
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(IEmployeeService employeeService, IGenericRepository<Employee> genericRepository)
         {
             _employeeService = employeeService;
+            _genericRepository = genericRepository;
         }
 
         /// <summary>
@@ -38,12 +42,16 @@ namespace Week1Assignment1.Controllers
         /// <returns>IActionResult</returns>
         [HttpGet("GetAll")]
         [HttpGet(Name = "EmployeeController"), Authorize]
-        public async Task<IActionResult> Get(int page = 1, int pageSize = 2)
+        public IActionResult Get(int page = 1, int pageSize = 2)
         {
             try
             {
-                var result = await _employeeService.GetAllEmployees();
+                var result = _genericRepository.GetAll();
                 var totalRecords = result.Count();
+
+                if (totalRecords <= 0)
+                    return NotFound();
+
                 var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
                 var items = result
                 .Skip((page - 1) * pageSize)
@@ -67,7 +75,7 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-                var result = await _employeeService.GetEmployeeById(id);
+                var result = _genericRepository.GetSingle(id);
 
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);
@@ -86,15 +94,19 @@ namespace Week1Assignment1.Controllers
         /// <param name="newEmployee"></param>
         /// <returns>IActionResult</returns>
         [HttpPost]
-        public async Task<IActionResult> AddEmployee(GetEmployeeDto newEmployee)
+        public async Task<IActionResult> AddEmployee(Employee newEmployee)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = await _employeeService.AddEmployee(newEmployee);
-                return Ok(new { result }, MsgKeys.AddEmployee);
+                _genericRepository.Insert(newEmployee);
+                var result = _genericRepository.SaveChanges();
+                if (result > 0)
+                    return Ok(new { newEmployee }, MsgKeys.AddEmployee);
+
+                return BadRequest("failed to add user");
             }
             catch (Exception e)
             {
@@ -108,20 +120,17 @@ namespace Week1Assignment1.Controllers
         /// <param name="updatedEmployee"></param>
         /// <returns>IActionResult</returns>
         [HttpPut]
-        public async Task<IActionResult> UpdateEmployee(GetEmployeeDto updatedEmployee)
+        public IActionResult UpdateEmployee(Employee updatedEmployee)
         {
             try
             {
-                var result = await _employeeService.UpdateEmployee(updatedEmployee);
-
-                if (result == null)
-                    return BadRequest(MsgKeys.InvalidUser);
-
-                return Ok(new { result }, MsgKeys.UpdateMsg);
+                _genericRepository.Update(updatedEmployee);
+                var result = _genericRepository.SaveChanges();
+                return Ok(new { updatedEmployee }, MsgKeys.UpdateMsg);
             }
-            catch (Exception e)
+            catch
             {
-                return BadRequest(e.Message);
+                return BadRequest(MsgKeys.UserNotFound);
             }
         }
 
@@ -135,32 +144,54 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-                var result = await _employeeService.DeleteEmployee(id);
-
-                if (result == null)
-                    return BadRequest(MsgKeys.InvalidUser);
-
+                var result = _genericRepository.GetSingle(id);
+                _genericRepository.Delete(result);
+                _genericRepository.SaveChanges();
                 return Ok(new { result }, MsgKeys.DeleteRecord);
             }
-            catch (Exception e)
+            catch
             {
-                return BadRequest(e.Message);
+                return BadRequest(MsgKeys.UserNotFound);
             }
         }
 
+        /// <summary>
+        /// Searching/Filtering
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="dept"></param>
+        /// <returns></returns>
         [HttpPost("search")]
-        public async Task<IActionResult> Search(string search)
+        public async Task<ActionResult<IEnumerable<Employee>>> GetProductsByCategory(string name, string dept)
         {
-            var results = await _employeeService.SearchPeople(search);
-
-            return Ok(new { results }, "Your Search Result!");
+            try
+            {
+                var result = await _genericRepository.GetBy(p => p.Name == name || p.EmployeeDept == dept);
+                return Ok(new { result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        /// <summary>
+        /// Sorting
+        /// </summary>
+        /// <param name="sortBy"></param>
+        /// <returns></returns>
         [HttpGet("sort")]
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortBy)
         {
-            var results = await _employeeService.GetSort(sortOrder);
-            return Ok(new { results }, "Your Search Result!");
+            try
+            {
+                var result = await _genericRepository.GetAll(x => x.Name, sortBy);
+                return Ok(new { result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

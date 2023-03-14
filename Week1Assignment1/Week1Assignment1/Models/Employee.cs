@@ -1,14 +1,25 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Week1Assignment1.Models
 {
     public class Employee
     {
         public int Id { get; set; }
-        public string Name { get; set; } = "Nazar";
-        public string EmployeeDept { get; set; } = "Development";
-        public int Salary { get; set; } = 30000;
-        public int Age { get; set; } = 25;
+
+        [StringLength(60, MinimumLength = 3)]
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string EmployeeDept { get; set; }
+        [Required]
+        public int Salary { get; set; }
+
+        [Range(18, 130)]
+        [Required]
+        public int Age { get; set; }
+        [Required]
         public EmpEnum Class { get; set; } = EmpEnum.Nazar;
+
     }
 }

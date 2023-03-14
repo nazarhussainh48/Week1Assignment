@@ -7,6 +7,9 @@ namespace Week1Assignment1.DTO.User
         [StringLength(60, MinimumLength = 3)]
         [Required]
         public string Username { get; set; }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
 
         [StringLength(60, MinimumLength = 3)]
         [Required]

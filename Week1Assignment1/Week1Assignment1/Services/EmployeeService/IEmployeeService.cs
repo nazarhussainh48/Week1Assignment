@@ -39,7 +39,7 @@ namespace Week1Assignment1.Services.EmployeeService
         /// <returns></returns>
         Task<GetEmployeeDto> DeleteEmployee(int id);
 
-        Task<List<GetEmployeeDto>> SearchPeople(string search);
+        Task<List<GetEmployeeDto>> SearchPeople(string search, string employeeDept);
 
         Task<List<GetEmployeeDto>> GetSort(string sort);
     }

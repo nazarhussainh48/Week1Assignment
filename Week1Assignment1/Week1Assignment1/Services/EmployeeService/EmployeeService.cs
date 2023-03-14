@@ -108,7 +108,7 @@ namespace Week1Assignment1.Services.EmployeeService
             return updatedEmployee;
         }
 
-        public async Task<List<GetEmployeeDto>> SearchPeople(string search)
+        public async Task<List<GetEmployeeDto>> SearchPeople(string search, string employeeDept)
         {
             List<Employee> dbEmployee = await _context.Employees.ToListAsync();
             var data = _mapper.Map<List<GetEmployeeDto>>(dbEmployee.ToList());

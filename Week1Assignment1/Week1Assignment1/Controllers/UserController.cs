@@ -32,7 +32,7 @@ namespace Week1Assignment1.Controllers
                     return BadRequest(ModelState);
 
                 var result = await _authUser.RegisterUser(
-                new MyUser { Username = request.Username }, request.Password
+                new MyUser { Username = request.Username, Email = request.Email }, request.Password
                 );
                 return Ok(new { result }, MsgKeys.RegisterUser);
             }
@@ -55,7 +55,7 @@ namespace Week1Assignment1.Controllers
                 var result = await _authUser.Login(request);
 
                 if (string.IsNullOrEmpty(result))
-                    return Unauthorized();
+                    return BadRequest(MsgKeys.UserNotFound);
 
                 return Ok(new { result }, MsgKeys.LoginUserSuccess);
             }

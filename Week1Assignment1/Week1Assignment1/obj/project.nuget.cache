@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Q4o+e3pWAxDe3wDJOLcXfqemlwpAWxV4y4xcjuoCvqrKD9RdxXqa0LoM2ti9JWjFr5ELlI7ysW5S9mKW4/DFow==",
+  "dgSpecHash": "PXzQBoRFf9jcOMUjWJ6QCqCQ95AG7xh2y/N8M599f7d/sAS/wJ/9+7MxmqcqD5h8ZJfj0sindiuxnLolSOP/Mw==",
   "success": true,
   "projectFilePath": "E:\\DotNetTraining\\DotNetTraining\\Week1Assignment1\\Week1Assignment1\\Week1Assignment1.csproj",
   "expectedPackageFiles": [
@@ -28,6 +28,7 @@
     "C:\\Users\\Nazar Hussain\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
     "C:\\Users\\Nazar Hussain\\.nuget\\packages\\microsoft.aspnetcore.identity\\2.2.0\\microsoft.aspnetcore.identity.2.2.0.nupkg.sha512",
     "C:\\Users\\Nazar Hussain\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\6.0.9\\microsoft.aspnetcore.identity.entityframeworkcore.6.0.9.nupkg.sha512",
+    "C:\\Users\\Nazar Hussain\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\7.0.3\\microsoft.aspnetcore.identity.ui.7.0.3.nupkg.sha512",
     "C:\\Users\\Nazar Hussain\\.nuget\\packages\\microsoft.aspnetcore.mvc.abstractions\\2.2.0\\microsoft.aspnetcore.mvc.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Nazar Hussain\\.nuget\\packages\\microsoft.aspnetcore.mvc.core\\2.2.0\\microsoft.aspnetcore.mvc.core.2.2.0.nupkg.sha512",
     "C:\\Users\\Nazar Hussain\\.nuget\\packages\\microsoft.aspnetcore.mvc.dataannotations\\2.2.0\\microsoft.aspnetcore.mvc.dataannotations.2.2.0.nupkg.sha512",

@@ -24,6 +24,7 @@ namespace Week1Assignment1.Data
             IConfiguration configuration,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager
+            
             )
         {
             _configuration = configuration;
@@ -72,7 +73,8 @@ namespace Week1Assignment1.Data
         {
             var iuser = new IdentityUser()
             {
-                UserName = user.Username
+                UserName = user.Username,
+                Email = user.Email
             };
             var result = await _userManager.CreateAsync(iuser, password);
             return result;
