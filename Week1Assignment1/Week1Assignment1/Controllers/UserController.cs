@@ -13,9 +13,12 @@ namespace Week1Assignment1.Controllers
     public class UserController : BaseController
     {
         private readonly IAuthService _authUser;
-        public UserController(IAuthService authUser)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public UserController(IAuthService authUser, UserManager<IdentityUser> userManager)
         {
             _authUser = authUser;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -63,6 +66,40 @@ namespace Week1Assignment1.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("getEmail")]
+        public async Task<IActionResult> GetEmailById(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var email = user.Email;
+
+            return Ok(new { email }, "Email is");
+        }
+
+
+        [HttpPost]
+        [Route("resetpassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return BadRequest("User not found.");
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            return Ok("Password Changed Successfully");
         }
     }
 }

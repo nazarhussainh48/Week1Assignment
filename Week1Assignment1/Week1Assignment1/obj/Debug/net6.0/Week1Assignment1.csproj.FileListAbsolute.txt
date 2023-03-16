@@ -129,3 +129,6 @@ E:\DotNetTraining\DotNetTraining\Week1Assignment1\Week1Assignment1\bin\Debug\net
 E:\DotNetTraining\DotNetTraining\Week1Assignment1\Week1Assignment1\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
 E:\DotNetTraining\DotNetTraining\Week1Assignment1\Week1Assignment1\bin\Debug\net6.0\Microsoft.Exchange.WebServices.Auth.dll
 E:\DotNetTraining\DotNetTraining\Week1Assignment1\Week1Assignment1\bin\Debug\net6.0\Microsoft.Exchange.WebServices.dll
+E:\DotNetTraining\DotNetTraining\Week1Assignment1\Week1Assignment1\bin\Debug\net6.0\MailKit.dll
+E:\DotNetTraining\DotNetTraining\Week1Assignment1\Week1Assignment1\bin\Debug\net6.0\MimeKit.dll
+E:\DotNetTraining\DotNetTraining\Week1Assignment1\Week1Assignment1\bin\Debug\net6.0\BouncyCastle.Crypto.dll

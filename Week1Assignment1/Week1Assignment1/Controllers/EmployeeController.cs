@@ -166,7 +166,11 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-                var result = await _genericRepository.GetBy(p => p.Name == name || p.EmployeeDept == dept);
+                var result = await _genericRepository.GetBy(p => p.Name == name && p.EmployeeDept == dept);
+
+                if (result.Count() == 0)
+                    return BadRequest($"{name} of the department: {dept} not found");
+
                 return Ok(new { result });
             }
             catch (Exception ex)

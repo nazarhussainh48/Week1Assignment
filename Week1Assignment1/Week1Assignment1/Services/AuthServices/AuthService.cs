@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -74,10 +78,31 @@ namespace Week1Assignment1.Data
             var iuser = new IdentityUser()
             {
                 UserName = user.Username,
-                Email = user.Email
+                Email = user.Email,
+                PasswordHash = password
             };
-            var result = await _userManager.CreateAsync(iuser, password);
+            //SendEmail(user.Email, password);
+            var result = await _userManager.CreateAsync(iuser);
+            //var token = await _userManager.GenerateEmailConfirmationTokenAsync(iuser);
             return result;
+        }
+
+
+        public async Task<string> SendEmail(string userEmail, string password)
+        {
+            var email = new MimeMessage();
+            email.From.Add(MailboxAddress.Parse(userEmail));
+            email.To.Add(MailboxAddress.Parse(userEmail));
+            email.Subject = "Test Email Subject";
+            //email.Body = new TextPart(TextFormat.Html) { Text = body };
+
+            using var smtp = new SmtpClient();
+            smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
+            smtp.Authenticate(userEmail, password);
+            smtp.Send(email);
+            smtp.Disconnect(true);
+
+            return null;
         }
     }
 }
