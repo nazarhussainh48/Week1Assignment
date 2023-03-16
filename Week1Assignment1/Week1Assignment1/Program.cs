@@ -15,11 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration
     .GetConnectionString("DefaultConnection")));
 
-
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = true;
-
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 0;
     options.Password.RequireLowercase = false;
@@ -28,8 +26,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<DataContext>()
 .AddDefaultTokenProviders();
-
-
 
 builder.Services.AddAuthentication(option =>
 {
@@ -109,7 +105,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-
-
-//Email Confirmation

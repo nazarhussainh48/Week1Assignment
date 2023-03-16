@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -52,7 +53,7 @@ namespace Week1Assignment1.Repository
         }
 
         /// <summary>
-        /// Adding Data
+        /// Adding Employee
         /// </summary>
         /// <param name="item"></param>
         public void Insert(T item)
@@ -84,7 +85,7 @@ namespace Week1Assignment1.Repository
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<T>> GetBy(Expression<Func<T, bool>> filter)
+        public async Task<IEnumerable<T>> GetEmployeeByFilter(Expression<Func<T, bool>> filter)
         {
             return await table.Where(filter).ToListAsync();
         }
@@ -96,22 +97,40 @@ namespace Week1Assignment1.Repository
         /// <param name="orderBy"></param>
         /// <param name="sortBy"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<T>> GetAll<TKey>(Expression<Func<T, TKey>> orderBy, string sortBy)
+        /// 
+        public async Task<IEnumerable<Employee>> Sorting(string sortBy, string order)
         {
-            var data = await table.ToListAsync();
+            //var data = await table.ToListAsync();
+            IQueryable<Employee> query = _dbContext.Employees;
+
             switch (sortBy)
             {
-                case "name_desc":
-                    data = await table.OrderByDescending(orderBy).ToListAsync();
+                case "name":
+                    if (order == "desc")
+                    {
+                        query = query.OrderByDescending(c => c.Name);
+                    }
+                    else
+                    {
+                        query = query.OrderBy(c => c.Name);
+                    }
                     break;
-                case "name_asc":
-                    data = await table.OrderBy(orderBy).ToListAsync();
+                case "salary":
+                    if (order == "desc")
+                    {
+                        query = query.OrderByDescending(c => c.Salary);
+                    }
+                    else
+                    {
+                        query = query.OrderBy(c => c.Salary);
+                    }
                     break;
                 default:
                     await table.ToListAsync();
                     break;
             }
-            return data;
+            return query;
         }
+
     }
 }

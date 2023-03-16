@@ -108,6 +108,12 @@ namespace Week1Assignment1.Services.EmployeeService
             return updatedEmployee;
         }
 
+        /// <summary>
+        /// Search People
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="employeeDept"></param>
+        /// <returns></returns>
         public async Task<List<GetEmployeeDto>> SearchPeople(string search, string employeeDept)
         {
             List<Employee> dbEmployee = await _context.Employees.ToListAsync();
@@ -115,6 +121,11 @@ namespace Week1Assignment1.Services.EmployeeService
             return data.Where(p => p.Name.ToLower().Contains(search.ToLower()) || p.EmployeeDept.ToLower().Contains(search.ToLower())).ToList();
         }
 
+        /// <summary>
+        /// Sorting
+        /// </summary>
+        /// <param name="sort"></param>
+        /// <returns></returns>
         public async Task<List<GetEmployeeDto>> GetSort(string sort)
         {
             List<Employee> dbEmployee = await _context.Employees.ToListAsync();

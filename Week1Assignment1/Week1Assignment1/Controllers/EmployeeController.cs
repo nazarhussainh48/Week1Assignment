@@ -162,11 +162,11 @@ namespace Week1Assignment1.Controllers
         /// <param name="dept"></param>
         /// <returns></returns>
         [HttpPost("search")]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetProductsByCategory(string name, string dept)
+        public async Task<ActionResult<IEnumerable<Employee>>> FilterEmployeeByDepartment(string name, string dept)
         {
             try
             {
-                var result = await _genericRepository.GetBy(p => p.Name == name && p.EmployeeDept == dept);
+                var result = await _genericRepository.GetEmployeeByFilter(p => p.Name == name && p.EmployeeDept == dept);
 
                 if (result.Count() == 0)
                     return BadRequest($"{name} of the department: {dept} not found");
@@ -185,11 +185,11 @@ namespace Week1Assignment1.Controllers
         /// <param name="sortBy"></param>
         /// <returns></returns>
         [HttpGet("sort")]
-        public async Task<IActionResult> Index(string sortBy)
+        public async Task<IActionResult> SortAscDesc(string sortBy, string order)
         {
             try
             {
-                var result = await _genericRepository.GetAll(x => x.Name, sortBy);
+                var result = await _genericRepository.Sorting(sortBy, order);
                 return Ok(new { result });
             }
             catch (Exception ex)
@@ -197,5 +197,7 @@ namespace Week1Assignment1.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
     }
 }

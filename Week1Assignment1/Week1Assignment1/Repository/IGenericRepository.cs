@@ -12,8 +12,11 @@ namespace Week1Assignment1.Repository
         void Update(T item);
         void Delete(T item);
         int SaveChanges();
-        Task<IEnumerable<T>> GetBy(Expression<Func<T, bool>> filter);
-        Task<IEnumerable<T>> GetAll<TKey>(Expression<Func<T, TKey>> orderBy, string sortBy);
+        Task<IEnumerable<T>> GetEmployeeByFilter(Expression<Func<T, bool>> filter);
+        Task<IEnumerable<Employee>> Sorting(string sortBy, string order);
+        //Task<IEnumerable<T>> GetSortedData(string sortField, bool ascending);
+
+
 
     }
 

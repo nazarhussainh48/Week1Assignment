@@ -58,7 +58,7 @@ namespace Week1Assignment1.Controllers
                 var result = await _authUser.Login(request);
 
                 if (string.IsNullOrEmpty(result))
-                    return BadRequest(MsgKeys.UserNotFound);
+                    return BadRequest(MsgKeys.UsernameOrPasswordIncorrect);
 
                 return Ok(new { result }, MsgKeys.LoginUserSuccess);
             }
@@ -68,38 +68,36 @@ namespace Week1Assignment1.Controllers
             }
         }
 
-        [HttpGet("getEmail")]
-        public async Task<IActionResult> GetEmailById(string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var email = user.Email;
-
-            return Ok(new { email }, "Email is");
-        }
-
-
-        [HttpPost]
-        [Route("resetpassword")]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("setPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
+            try
             {
-                return BadRequest("User not found.");
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user == null)
+                    return BadRequest(MsgKeys.UserNotFound);
+
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+
+                if (!result.Succeeded)
+                    return BadRequest(result.Errors);
+
+                return Ok();
             }
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
-            if (!result.Succeeded)
+            catch (Exception ex)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(ex.Message);
             }
-            return Ok("Password Changed Successfully");
         }
     }
 }

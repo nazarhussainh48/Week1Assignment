@@ -13,6 +13,10 @@
         public static string RegisterUser => "User Registered Successfully";
         public static string LoginUserSuccess => "User LoggedIn Successfully";
         public static string UserNotFound => "User Not Found";
+        public static string PasswordChange => "Password Changed Successfully";
+        public static string EmailConfirm => "Email Confirmed Successfully";
+        public static string UsernameOrPasswordIncorrect => "Username or password is incorrect, try again!";
+
 
 
     }

@@ -21,7 +21,5 @@ namespace Week1Assignment1.Services.AuthServices
         /// <param name="password"></param>
         /// <returns></returns>
         Task<string> Login(UserLoginDto userLogin);
-
-        //Task<IActionResult> GetEmailById(string userId)
     }
 }
