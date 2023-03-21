@@ -9,7 +9,7 @@ namespace Week1Assignment1.Services.EmployeeService
         /// For Getting List of all employees
         /// </summary>
         /// <returns></returns>
-        Task<List<GetEmployeeDto>> GetAllEmployees();
+        Task<List<GetEmployeeDto>> GetAllEmployees(int page, int pageSize);
 
         /// <summary>
         /// For Getting the list of single employee by id
@@ -23,7 +23,8 @@ namespace Week1Assignment1.Services.EmployeeService
         /// </summary>
         /// <param name="newEmployee"></param>
         /// <returns></returns>
-        Task<List<GetEmployeeDto>> AddEmployee(GetEmployeeDto newEmployee);
+        //Task<List<GetEmployeeDto>> AddEmployee(GetEmployeeDto newEmployee);
+        Task<GetEmployeeDto> AddEmployee(GetEmployeeDto newEmployee);
 
         /// <summary>
         /// For Updating Employee
@@ -39,8 +40,8 @@ namespace Week1Assignment1.Services.EmployeeService
         /// <returns></returns>
         Task<GetEmployeeDto> DeleteEmployee(int id);
 
-        Task<List<GetEmployeeDto>> SearchPeople(string search, string employeeDept);
+        Task<IEnumerable<GetEmployeeDto>> Filter(int id, string? name, string? dept, int salary, int age);
 
-        Task<List<GetEmployeeDto>> GetSort(string sort);
+        Task<IEnumerable<GetEmployeeDto>> GetSort(string sortBy, string order);
     }
 }

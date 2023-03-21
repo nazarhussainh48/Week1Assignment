@@ -13,7 +13,7 @@ namespace Week1Assignment1.Services.AuthServices
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<IdentityResult> RegisterUser(MyUser user, string password);
+        Task<IdentityResult> RegisterUser(UserRegDto requres);
         /// <summary>
         /// login user interface
         /// </summary>

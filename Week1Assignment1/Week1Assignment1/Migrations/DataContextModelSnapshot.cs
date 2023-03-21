@@ -238,19 +238,20 @@ namespace Week1Assignment1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MyUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
 
                     b.Property<int>("Salary")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("MyUserId");
 
                     b.ToTable("Employees");
                 });
@@ -262,6 +263,10 @@ namespace Week1Assignment1.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
@@ -277,7 +282,7 @@ namespace Week1Assignment1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Myuser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -333,13 +338,9 @@ namespace Week1Assignment1.Migrations
 
             modelBuilder.Entity("Week1Assignment1.Models.Employee", b =>
                 {
-                    b.HasOne("Week1Assignment1.Models.MyUser", "User")
+                    b.HasOne("Week1Assignment1.Models.MyUser", null)
                         .WithMany("Employees")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("MyUserId");
                 });
 
             modelBuilder.Entity("Week1Assignment1.Models.MyUser", b =>

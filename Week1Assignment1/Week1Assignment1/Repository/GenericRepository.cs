@@ -1,11 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Xml.Linq;
+﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Week1Assignment1.Data;
-using Week1Assignment1.Models;
 
 namespace Week1Assignment1.Repository
 {
@@ -28,18 +23,31 @@ namespace Week1Assignment1.Repository
         /// Delete by Id
         /// </summary>
         /// <param name="item"></param>
-        public void Delete(T item)
+        public async Task<T> Delete(int id)
         {
-            table.Remove(item);
+            var entity = GetSingle(id);
+            table.Remove(entity);
+            SaveChanges();
+            return entity;
         }
 
         /// <summary>
         /// Get All Employees
         /// </summary>
         /// <returns></returns>
-        public List<T> GetAll()
+        public List<T> GetAll(int page, int pageSize)
         {
-            return table.ToList();
+            var query = table.AsQueryable();
+            var totalRecords = query.Count();
+
+            if (totalRecords <= 0)
+                return null;
+
+            var items = query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+            return items;
         }
 
         /// <summary>
@@ -56,9 +64,11 @@ namespace Week1Assignment1.Repository
         /// Adding Employee
         /// </summary>
         /// <param name="item"></param>
-        public void Insert(T item)
+        public async Task<T> Insert(T item)
         {
-            table.Add(item);
+            await table.AddAsync(item);
+            SaveChanges();
+            return item;
         }
 
         /// <summary>
@@ -74,10 +84,19 @@ namespace Week1Assignment1.Repository
         /// Updating
         /// </summary>
         /// <param name="item"></param>
-        public void Update(T item)
+        public async Task Update(T item)
         {
             table.Attach(item);
-            _dbContext.Entry(item).State = EntityState.Modified;
+            foreach(var property in _dbContext.Entry(item).Properties)
+            {
+                var currentValue = property.CurrentValue;
+                var isModified = property.IsModified;
+                if(currentValue == null && isModified )
+                {
+                    property.IsModified = false;
+                }
+            }
+            SaveChanges();
         }
 
         /// <summary>
@@ -85,9 +104,9 @@ namespace Week1Assignment1.Repository
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<T>> GetEmployeeByFilter(Expression<Func<T, bool>> filter)
+        public async Task<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate)
         {
-            return await table.Where(filter).ToListAsync();
+            return await table.Where(predicate).ToListAsync();
         }
 
         /// <summary>
@@ -98,39 +117,25 @@ namespace Week1Assignment1.Repository
         /// <param name="sortBy"></param>
         /// <returns></returns>
         /// 
-        public async Task<IEnumerable<Employee>> Sorting(string sortBy, string order)
+        public async Task<IEnumerable<T>> Sorting(string sortBy, string order)
         {
-            //var data = await table.ToListAsync();
-            IQueryable<Employee> query = _dbContext.Employees;
+            IQueryable<T> q = from p in table select p;
+            var field = char.ToUpper(sortBy[0]) + (sortBy.Substring(1).ToLower());
+            q = q.OrderBy(p => EF.Property<object>(p, field));
 
-            switch (sortBy)
+            switch (order)
             {
-                case "name":
-                    if (order == "desc")
-                    {
-                        query = query.OrderByDescending(c => c.Name);
-                    }
-                    else
-                    {
-                        query = query.OrderBy(c => c.Name);
-                    }
+                case "asc":
+                    q = q.OrderBy(p => EF.Property<object>(p, field));
                     break;
-                case "salary":
-                    if (order == "desc")
-                    {
-                        query = query.OrderByDescending(c => c.Salary);
-                    }
-                    else
-                    {
-                        query = query.OrderBy(c => c.Salary);
-                    }
+                case "desc":
+                    q = q.OrderByDescending(p => EF.Property<object>(p, field));
                     break;
                 default:
-                    await table.ToListAsync();
+                    await q.ToListAsync();
                     break;
             }
-            return query;
+            return q;
         }
-
     }
 }

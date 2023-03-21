@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Week1Assignment1.Data;
 using Week1Assignment1.DTO.User;
 using Week1Assignment1.Helper;
@@ -26,22 +27,24 @@ namespace Week1Assignment1.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("RegUser")]
-        public async Task<IActionResult> RegUser(UserRegDto request)
+        [HttpPost("RegisterUser")]
+        public async Task<IActionResult> RegisterUser(UserRegDto request)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = await _authUser.RegisterUser(
-                new MyUser { Username = request.Username, Email = request.Email }, request.Password
-                );
-                return Ok(new { result }, MsgKeys.RegisterUser);
+                var result = await _authUser.RegisterUser(request);
+
+                if (result.Succeeded == false)
+                    return BadRequest(result.Errors, MsgKeys.RegisterFailed);
+
+                return Ok(MsgKeys.RegisterUser);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex, ex.Message);
             }
         }
 
@@ -55,12 +58,12 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-                var result = await _authUser.Login(request);
+                var token = await _authUser.Login(request);
 
-                if (string.IsNullOrEmpty(result))
+                if (string.IsNullOrEmpty(token))
                     return BadRequest(MsgKeys.UsernameOrPasswordIncorrect);
 
-                return Ok(new { result }, MsgKeys.LoginUserSuccess);
+                return Ok( new { token } , MsgKeys.LoginUserSuccess);
             }
             catch (Exception ex)
             {
@@ -69,35 +72,35 @@ namespace Week1Assignment1.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Reset password by email
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost("setPassword")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+        //[HttpPost("setPassword")]
+        //public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+        //{
+        //    try
+        //    {
+        //        if (!ModelState.IsValid)
+        //            return BadRequest(ModelState);
 
-                var user = await _userManager.FindByEmailAsync(model.Email);
+        //        var user = await _userManager.FindByEmailAsync(model.Email);
 
-                if (user == null)
-                    return BadRequest(MsgKeys.UserNotFound);
+        //        if (user == null)
+        //            return BadRequest(MsgKeys.UserNotFound);
 
-                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+        //        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        //        var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
 
-                if (!result.Succeeded)
-                    return BadRequest(result.Errors);
+        //        if (!result.Succeeded)
+        //            return BadRequest(result.Errors);
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }

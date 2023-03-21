@@ -6,15 +6,14 @@ namespace Week1Assignment1.Repository
 {
     public interface IGenericRepository<T>
     {
-        List<T> GetAll();
+        List<T> GetAll(int page, int pageSize);
         T GetSingle(int id);
-        void Insert(T item);
-        void Update(T item);
-        void Delete(T item);
+        Task<T> Insert(T item);
+        Task Update(T item);
+        Task<T> Delete(int id);
         int SaveChanges();
-        Task<IEnumerable<T>> GetEmployeeByFilter(Expression<Func<T, bool>> filter);
-        Task<IEnumerable<Employee>> Sorting(string sortBy, string order);
-        //Task<IEnumerable<T>> GetSortedData(string sortField, bool ascending);
+        Task<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> Sorting(string sortBy, string order);
 
 
 

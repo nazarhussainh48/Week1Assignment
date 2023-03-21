@@ -75,20 +75,21 @@ namespace Week1Assignment1.Data
         /// <param name="password"></param>
         /// <returns>data</returns>
         /// <exception cref="Exception"></exception>
-        public async Task<IdentityResult> RegisterUser(MyUser user, string password)
+        public async Task<IdentityResult> RegisterUser(UserRegDto request)
         {
-            var emailUser = await _userManager.FindByEmailAsync(user.Email);
+            var emailUser = await _userManager.FindByEmailAsync(request.Email);
+            var userName1 = await _userManager.FindByNameAsync(request.Username);
 
-            if (emailUser == null)
-                SendEmail(user.Email, password, MsgKeys.EmailConfirm);
+            if (emailUser == null && userName1 == null)
+                SendEmail(request.Email, request.Password, MsgKeys.EmailConfirm);
 
             var iuser = new IdentityUser()
             {
-                UserName = user.Username,
-                Email = user.Email,
+                UserName = request.Username,
+                Email = request.Email,
             };
             
-            var result = await _userManager.CreateAsync(iuser, password);
+            var result = await _userManager.CreateAsync(iuser, request.Password);
             return result;
         }
 

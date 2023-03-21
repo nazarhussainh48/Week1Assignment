@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Week1Assignment1.DTO.Employee;
 using Week1Assignment1.Models;
 
 namespace Week1Assignment1.Data

@@ -16,6 +16,11 @@
         public static string PasswordChange => "Password Changed Successfully";
         public static string EmailConfirm => "Email Confirmed Successfully";
         public static string UsernameOrPasswordIncorrect => "Username or password is incorrect, try again!";
+        public static string FailedToAddUser => "Failed to add user!";
+        public static string FilterSuccess => "You retrieved your filtered data successfully!";
+        public static string RegisterFailed => "Registeration Failed!";
+        public static string NoEmployeeFound => "Employee does not exists!";
+        public static string NullData => "Null Data Entered!";
 
 
 

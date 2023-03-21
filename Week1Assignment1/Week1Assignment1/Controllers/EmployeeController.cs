@@ -42,22 +42,16 @@ namespace Week1Assignment1.Controllers
         /// <returns>IActionResult</returns>
         [HttpGet("GetAll")]
         [HttpGet(Name = "EmployeeController"), Authorize]
-        public IActionResult Get(int page = 1, int pageSize = 2)
+        public async Task<IActionResult> Get(int page = 1, int pageSize = 5)
         {
             try
             {
-                var result = _genericRepository.GetAll();
-                var totalRecords = result.Count();
+                var result = await _employeeService.GetAllEmployees(page, pageSize);
 
-                if (totalRecords <= 0)
-                    return NotFound();
+                if (result == null)
+                    return BadRequest(MsgKeys.NoEmployeeFound);
 
-                var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
-                var items = result
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-                return Ok(new { items }, MsgKeys.RetrieveEmployee);
+                return Ok(new { result }, MsgKeys.RetrieveEmployee);
             }
             catch (Exception e)
             {
@@ -75,12 +69,12 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-                var result = _genericRepository.GetSingle(id);
+                var result = await _employeeService.GetEmployeeById(id);
 
                 if (result == null)
                     return BadRequest(MsgKeys.InvalidUser);
 
-                return Ok(new { result }, MsgKeys.RetrievSingle);
+                return Ok(result, MsgKeys.RetrievSingle);
             }
             catch (Exception e)
             {
@@ -94,19 +88,15 @@ namespace Week1Assignment1.Controllers
         /// <param name="newEmployee"></param>
         /// <returns>IActionResult</returns>
         [HttpPost]
-        public async Task<IActionResult> AddEmployee(Employee newEmployee)
+        public async Task<IActionResult> AddEmployees(GetEmployeeDto newEmployee)
         {
             try
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                if (!ModelState.IsValid || newEmployee == null)
+                    return BadRequest(MsgKeys.NullData);
 
-                _genericRepository.Insert(newEmployee);
-                var result = _genericRepository.SaveChanges();
-                if (result > 0)
-                    return Ok(new { newEmployee }, MsgKeys.AddEmployee);
-
-                return BadRequest("failed to add user");
+                var result = await _employeeService.AddEmployee(newEmployee);
+                return Ok(result, MsgKeys.AddEmployee);
             }
             catch (Exception e)
             {
@@ -120,13 +110,15 @@ namespace Week1Assignment1.Controllers
         /// <param name="updatedEmployee"></param>
         /// <returns>IActionResult</returns>
         [HttpPut]
-        public IActionResult UpdateEmployee(Employee updatedEmployee)
+        public async Task<IActionResult> UpdateEmployee(GetEmployeeDto updatedEmployee)
         {
             try
             {
-                _genericRepository.Update(updatedEmployee);
-                var result = _genericRepository.SaveChanges();
-                return Ok(new { updatedEmployee }, MsgKeys.UpdateMsg);
+                if (!ModelState.IsValid || updatedEmployee == null)
+                    return BadRequest(MsgKeys.NullData);
+
+                var result = await _employeeService.UpdateEmployee(updatedEmployee);
+                return Ok(result, MsgKeys.UpdateMsg);
             }
             catch
             {
@@ -144,10 +136,8 @@ namespace Week1Assignment1.Controllers
         {
             try
             {
-                var result = _genericRepository.GetSingle(id);
-                _genericRepository.Delete(result);
-                _genericRepository.SaveChanges();
-                return Ok(new { result }, MsgKeys.DeleteRecord);
+                var result = await _employeeService.DeleteEmployee(id);
+                return Ok(MsgKeys.DeleteRecord);
             }
             catch
             {
@@ -161,17 +151,18 @@ namespace Week1Assignment1.Controllers
         /// <param name="name"></param>
         /// <param name="dept"></param>
         /// <returns></returns>
-        [HttpPost("search")]
-        public async Task<ActionResult<IEnumerable<Employee>>> FilterEmployeeByDepartment(string name, string dept)
+        [HttpPost("filter")]
+        //public async Task<ActionResult<IEnumerable<GetEmployeeDto>>> FilterEmployee(string name, string dept)
+        public async Task<ActionResult<IEnumerable<GetEmployeeDto>>> FilterEmployee(int id,string? name, string? dept, int salary, int age)
         {
             try
             {
-                var result = await _genericRepository.GetEmployeeByFilter(p => p.Name == name && p.EmployeeDept == dept);
+                var result = await _employeeService.Filter(id, name, dept, salary, age);
 
                 if (result.Count() == 0)
                     return BadRequest($"{name} of the department: {dept} not found");
 
-                return Ok(new { result });
+                return Ok(new { result }, MsgKeys.FilterSuccess);
             }
             catch (Exception ex)
             {
@@ -185,11 +176,11 @@ namespace Week1Assignment1.Controllers
         /// <param name="sortBy"></param>
         /// <returns></returns>
         [HttpGet("sort")]
-        public async Task<IActionResult> SortAscDesc(string sortBy, string order)
+        public async Task<IActionResult> Sorting(string sortBy, string order)
         {
             try
             {
-                var result = await _genericRepository.Sorting(sortBy, order);
+                var result = await _employeeService.GetSort(sortBy, order);
                 return Ok(new { result });
             }
             catch (Exception ex)
@@ -197,7 +188,5 @@ namespace Week1Assignment1.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
     }
 }

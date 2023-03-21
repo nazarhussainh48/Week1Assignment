@@ -48,7 +48,8 @@ namespace Week1Assignment1.Controllers
                 Status = ServiceResponseModel.Response.Success,
                 Message = message,
                 Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(value))
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(value)),
+                Errors = null
             });
         }
 
@@ -92,8 +93,8 @@ namespace Week1Assignment1.Controllers
             {
                 Status = ServiceResponseModel.Response.Error,
                 Message = message,
-                Data = value.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(value, null))
+                Data = null,
+                Errors = value
             });
         }
     }
