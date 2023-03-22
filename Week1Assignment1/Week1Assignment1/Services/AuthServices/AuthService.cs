@@ -89,8 +89,8 @@ namespace Week1Assignment1.Data
                 Email = request.Email,
             };
             
-            var result = await _userManager.CreateAsync(iuser, request.Password);
-            return result;
+            var result = _userManager.CreateAsync(iuser, request.Password);
+            return await result;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Week1Assignment1.Data
         /// <param name="userEmail"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task<string> SendEmail(string userEmail, string password, string body)
+        public void SendEmail(string userEmail, string password, string body)
         {
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(userEmail));
@@ -111,7 +111,6 @@ namespace Week1Assignment1.Data
             smtp.Authenticate(userEmail, password);
             smtp.Send(email);
             smtp.Disconnect(true);
-            return null;
         }
     }
 }

@@ -11,14 +11,14 @@ namespace Week1Assignment1.DTO.Employee
     {
         public int Id { get; set; }
 
-        [StringLength(60, MinimumLength = 3)]
-        public string? Name { get; set; }
+        //[StringLength(60, MinimumLength = 3)]
+        public string Name { get; set; }
         
-        public string? EmployeeDept { get; set; }
+        public string EmployeeDept { get; set; }
 
         public int Salary { get; set; }
 
-        [Range(18, 130)]
+        //[Range(18, 130)]
         
         public int Age { get; set; }
         

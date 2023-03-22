@@ -1,4 +1,5 @@
 ﻿using Week1Assignment1.DTO.Employee;
+using Week1Assignment1.Helper;
 using Week1Assignment1.Models;
 
 namespace Week1Assignment1.Services.EmployeeService
@@ -9,7 +10,7 @@ namespace Week1Assignment1.Services.EmployeeService
         /// For Getting List of all employees
         /// </summary>
         /// <returns></returns>
-        Task<List<GetEmployeeDto>> GetAllEmployees(int page, int pageSize);
+        List<GetEmployeeDto> GetAllEmployees(QueryParameters queryParameter);
 
         /// <summary>
         /// For Getting the list of single employee by id
@@ -23,7 +24,6 @@ namespace Week1Assignment1.Services.EmployeeService
         /// </summary>
         /// <param name="newEmployee"></param>
         /// <returns></returns>
-        //Task<List<GetEmployeeDto>> AddEmployee(GetEmployeeDto newEmployee);
         Task<GetEmployeeDto> AddEmployee(GetEmployeeDto newEmployee);
 
         /// <summary>
@@ -39,9 +39,5 @@ namespace Week1Assignment1.Services.EmployeeService
         /// <param name="id"></param>
         /// <returns></returns>
         Task<GetEmployeeDto> DeleteEmployee(int id);
-
-        Task<IEnumerable<GetEmployeeDto>> Filter(int id, string? name, string? dept, int salary, int age);
-
-        Task<IEnumerable<GetEmployeeDto>> GetSort(string sortBy, string order);
     }
 }

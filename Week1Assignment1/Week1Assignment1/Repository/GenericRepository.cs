@@ -1,6 +1,11 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
+using MailKit.Search;
 using Microsoft.EntityFrameworkCore;
 using Week1Assignment1.Data;
+
 
 namespace Week1Assignment1.Repository
 {
@@ -35,19 +40,23 @@ namespace Week1Assignment1.Repository
         /// Get All Employees
         /// </summary>
         /// <returns></returns>
-        public List<T> GetAll(int page, int pageSize)
+        public List<T> GetAll(string? orderBy, int pageSize = 3, int currentPage = 1, string? filter = null)
         {
-            var query = table.AsQueryable();
-            var totalRecords = query.Count();
+            IQueryable<T> query = from p in table select p;
 
-            if (totalRecords <= 0)
-                return null;
+            // Apply filters
+            if (!string.IsNullOrEmpty(filter))
+                query = query.Where(filter);
 
-            var items = query
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-            return items;
+            // Apply sorting
+            if (!string.IsNullOrEmpty(orderBy))
+                query = query.OrderBy(p => EF.Property<object>(p, orderBy));
+
+            // Apply pagination
+            var skip = (currentPage - 1) * pageSize;
+            query = query.Skip(skip).Take(pageSize);
+
+            return query.ToList();
         }
 
         /// <summary>
@@ -107,35 +116,6 @@ namespace Week1Assignment1.Repository
         public async Task<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate)
         {
             return await table.Where(predicate).ToListAsync();
-        }
-
-        /// <summary>
-        /// Sorting
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <param name="orderBy"></param>
-        /// <param name="sortBy"></param>
-        /// <returns></returns>
-        /// 
-        public async Task<IEnumerable<T>> Sorting(string sortBy, string order)
-        {
-            IQueryable<T> q = from p in table select p;
-            var field = char.ToUpper(sortBy[0]) + (sortBy.Substring(1).ToLower());
-            q = q.OrderBy(p => EF.Property<object>(p, field));
-
-            switch (order)
-            {
-                case "asc":
-                    q = q.OrderBy(p => EF.Property<object>(p, field));
-                    break;
-                case "desc":
-                    q = q.OrderByDescending(p => EF.Property<object>(p, field));
-                    break;
-                default:
-                    await q.ToListAsync();
-                    break;
-            }
-            return q;
         }
     }
 }
