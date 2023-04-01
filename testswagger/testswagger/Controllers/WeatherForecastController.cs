@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Week1Assignment1.Controllers
+namespace testswagger.Controllers
 {
     [ApiController]
     [Route("[controller]")]

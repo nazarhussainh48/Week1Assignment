@@ -1,4 +1,4 @@
-namespace Week1Assignment1
+namespace testswagger
 {
     public class WeatherForecast
     {
