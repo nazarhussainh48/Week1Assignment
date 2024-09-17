@@ -30,3 +30,5 @@ E:\DotNetTraining\Week1Assignment\Week1Assignment1\Week1Assignment1\obj\Debug\ne
 E:\DotNetTraining\Week1Assignment\Week1Assignment1\Week1Assignment1\obj\Debug\net6.0\Week1Assignment1.pdb
 E:\DotNetTraining\Week1Assignment\Week1Assignment1\Week1Assignment1\obj\Debug\net6.0\Week1Assignment1.genruntimeconfig.cache
 E:\DotNetTraining\Week1Assignment\Week1Assignment1\Week1Assignment1\obj\Debug\net6.0\ref\Week1Assignment1.dll
+E:\DotNetTraining\Week1Assignment\Week1Assignment1\Week1Assignment1\bin\Debug\net6.0\AutoMapper.dll
+E:\DotNetTraining\Week1Assignment\Week1Assignment1\Week1Assignment1\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

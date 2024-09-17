@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\DotNetTraining\\Week1Assignment\\Week1Assignment1\\Week1Assignment1\\Week1Assignment1.csproj": {}
+    "E:\\DotNetTraining\\DotNetTraining\\Week1Assignment1\\Week1Assignment1\\Week1Assignment1.csproj": {}
   },
   "projects": {
-    "E:\\DotNetTraining\\Week1Assignment\\Week1Assignment1\\Week1Assignment1\\Week1Assignment1.csproj": {
+    "E:\\DotNetTraining\\DotNetTraining\\Week1Assignment1\\Week1Assignment1\\Week1Assignment1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\DotNetTraining\\Week1Assignment\\Week1Assignment1\\Week1Assignment1\\Week1Assignment1.csproj",
+        "projectUniqueName": "E:\\DotNetTraining\\DotNetTraining\\Week1Assignment1\\Week1Assignment1\\Week1Assignment1.csproj",
         "projectName": "Week1Assignment1",
-        "projectPath": "E:\\DotNetTraining\\Week1Assignment\\Week1Assignment1\\Week1Assignment1\\Week1Assignment1.csproj",
+        "projectPath": "E:\\DotNetTraining\\DotNetTraining\\Week1Assignment1\\Week1Assignment1\\Week1Assignment1.csproj",
         "packagesPath": "C:\\Users\\Nazar Hussain\\.nuget\\packages\\",
-        "outputPath": "E:\\DotNetTraining\\Week1Assignment\\Week1Assignment1\\Week1Assignment1\\obj\\",
+        "outputPath": "E:\\DotNetTraining\\DotNetTraining\\Week1Assignment1\\Week1Assignment1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -44,6 +44,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
@@ -68,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }
